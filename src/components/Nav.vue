@@ -1,11 +1,7 @@
 <template>
   <nav>
     <a href="#">
-      <img
-        class="navLogo"
-        src="../assets/BuyerBridge_LOGO-dark-1.png"
-        alt="BuyerBridge"
-      />
+      <img class="navLogo" src="@/assets/logo.png" alt="BuyerBridge" />
     </a>
   </nav>
 </template>
@@ -16,8 +12,14 @@ export default {
 };
 </script>
 
-<style lang="css" scoped>
+<style lang="scss" scoped>
 nav {
-  background: red;
+  background: rgb(111, 117, 178);
+  background: linear-gradient(160deg, $l-start 38%, $l-end 100%);
+  padding: 30px 60px;
+  .navLogo {
+    width: 270px;
+    filter: brightness(0) invert(1);
+  }
 }
 </style>

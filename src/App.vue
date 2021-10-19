@@ -1,48 +1,48 @@
-<template>
-  <div id="app">
-    <Nav />
-
-    <main>
-      <input
-        type="text"
-        class="search-bar"
-        placeholder="Search..."
-        v-model="query"
-        @keypress="fetchWeather"
+<template id="app">
+  <Nav />
+  <main>
+    <input
+      type="text"
+      class="search-bar"
+      placeholder="Search..."
+      v-model="query"
+      @keypress="fetchWeather"
+    />
+    <div class="weather-data" v-if="weather.main !== undefined">
+      <img
+        v-bind:src="
+          'http://openweathermap.org/img/wn/' +
+          weather.weather[0].icon +
+          '@2x.png'
+        "
+        v-bind:alt="weather.weather[0].main"
       />
-      <div class="weather-data" v-if="weather.main !== undefined">
-        <img
-          v-bind:src="
-            'http://openweathermap.org/img/wn/' +
-            weather.weather[0].icon +
-            '@2x.png'
-          "
-          v-bind:alt="weather.weather[0].main"
-        />
-        <p class="location">{{ weather.name }}, {{ weather.sys.country }}</p>
-        <p class="date">{{ dateBuilder() }}</p>
-        <p class="temp">{{ Math.round(weather.main.temp) }}°C</p>
-        <p class="min-max">
-          <span class="temp-low">Low:</span>
-          {{ Math.round(weather.main.temp_min) }}°C
-          <span class="temp-high">High:</span>
-          {{ Math.round(weather.main.temp_max) }}°C
-        </p>
-        <p class="weather">{{ weather.weather[0].description }}</p>
-      </div>
-      <div class="weather-data" v-if="weather.main === undefined">
-        <p class="date">Please select another location</p>
-      </div>
-    </main>
-  </div>
+      <p class="location">{{ weather.name }}, {{ weather.sys.country }}</p>
+      <p class="date">{{ dateBuilder() }}</p>
+      <p class="temp">{{ Math.round(weather.main.temp) }}°C</p>
+      <p class="min-max">
+        <span class="temp-low">Low:</span>
+        {{ Math.round(weather.main.temp_min) }}°C
+        <span class="temp-high">High:</span>
+        {{ Math.round(weather.main.temp_max) }}°C
+      </p>
+      <p class="weather">{{ weather.weather[0].description }}</p>
+    </div>
+    <div class="weather-data" v-if="weather.main === undefined">
+      <p class="date">Please select another location</p>
+    </div>
+  </main>
+  <Footer />
 </template>
 
 <script>
 import Nav from "./components/Nav";
+import Footer from "./components/Footer";
 export default {
   name: "App",
   components: {
     Nav,
+    Footer,
   },
   data() {
     return {
@@ -162,10 +162,17 @@ export default {
 };
 </script>
 
-<style>
+<style lang="scss">
 * {
   margin: 0;
   padding: 0;
   box-sizing: border-box;
+}
+#app {
+  background: $bg;
+  min-height: 100vh;
+  display: flex;
+  justify-content: space-between;
+  flex-direction: column;
 }
 </style>
