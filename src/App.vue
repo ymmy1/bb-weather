@@ -1,37 +1,13 @@
 <template id="app">
   <Nav />
-  <main>
-    <input
-      type="text"
-      class="search-bar"
-      placeholder="Search..."
+  <div class="main">
+    <router-view
+      :weatherData="weather"
       v-model="query"
-      @keypress="fetchWeather"
+      :error="error"
+      @fetchWeather="fetchWeather()"
     />
-    <div class="weather-data" v-if="weather.main !== undefined">
-      <img
-        v-bind:src="
-          'http://openweathermap.org/img/wn/' +
-          weather.weather[0].icon +
-          '@2x.png'
-        "
-        v-bind:alt="weather.weather[0].main"
-      />
-      <p class="location">{{ weather.name }}, {{ weather.sys.country }}</p>
-      <p class="date">{{ dateBuilder() }}</p>
-      <p class="temp">{{ Math.round(weather.main.temp) }}°C</p>
-      <p class="min-max">
-        <span class="temp-low">Low:</span>
-        {{ Math.round(weather.main.temp_min) }}°C
-        <span class="temp-high">High:</span>
-        {{ Math.round(weather.main.temp_max) }}°C
-      </p>
-      <p class="weather">{{ weather.weather[0].description }}</p>
-    </div>
-    <div class="weather-data" v-if="weather.main === undefined">
-      <p class="date">Please select another location</p>
-    </div>
-  </main>
+  </div>
   <Footer />
 </template>
 
@@ -48,38 +24,38 @@ export default {
     return {
       api_key: "d1c59648c144681a6a487b45f5b0c58b",
       url_base: "https://api.openweathermap.org/data/2.5/",
-      query: "",
+      lat: 0,
+      lon: 0,
+      name: "",
+      country: "",
+
+      error: "search a city",
+
+      query: "Seattle",
       weather: {},
-      weatherForecast: {},
     };
   },
-  created() {
-    fetch(
-      `${this.url_base}weather?q=seattle&units=metric&APPID=${this.api_key}`
-    )
-      .then((res) => {
-        return res.json();
-      })
-      .then(this.setResult);
-  },
   methods: {
-    fetchWeather(e) {
-      if (e.key == "Enter") {
-        fetch(
-          `${this.url_base}weather?q=${this.query}&units=metric&APPID=${this.api_key}`
-        )
-          .then((res) => {
-            return res.json();
-          })
-          .then(this.setResult);
-      }
+    fetchWeather() {
+      fetch(
+        `${this.url_base}weather?q=${this.query}&units=metric&APPID=${this.api_key}`
+      )
+        .then((res) => {
+          return res.json();
+        })
+        .then(this.latLon);
     },
-    setResult(result) {
-      this.weather = result;
-
-      if (this.weather.main !== undefined) {
+    latLon(coord) {
+      if (coord.cod != 200) {
+        this.weather = {};
+        this.error = coord.message;
+      } else {
+        this.lat = coord.coord.lat;
+        this.lon = coord.coord.lon;
+        this.name = coord.name;
+        this.country = coord.sys.country;
         fetch(
-          `${this.url_base}forecast?q=${this.query}&units=metric&APPID=${this.api_key}`
+          `${this.url_base}onecall?lat=${this.lat}&lon=${this.lon}&exclude=minutely,hourly,alerts&units=imperial&appid=${this.api_key}`
         )
           .then((res) => {
             return res.json();
@@ -88,81 +64,27 @@ export default {
       }
     },
     setForecastResult(result) {
-      let newList = [{}];
-      let index = 0;
-      let months = [
-        "Jan",
-        "Feb",
-        "Mar",
-        "Apr",
-        "May",
-        "Jun",
-        "Jul",
-        "Aug",
-        "Sep",
-        "Oct",
-        "Nov",
-        "Dec",
-      ];
-      for (let i = 0; i < result.list.length; i++) {
-        let dateTime = result.list[i].dt_txt.split(" ");
-        let convertDate = dateTime[0].slice(5, 11).split("-");
-        let date = months[convertDate[0] - 1] + " " + convertDate[1];
-        let time = dateTime[1];
-        if (newList[index].date !== date) {
-          index++;
-          result.list[i].dt_txt = time.slice(0, 5);
-          let item = {
-            date: date,
-            items: [result.list[i]],
-          };
-          newList.push(item);
-        } else {
-          result.list[i].dt_txt = time.slice(0, 5);
-          newList[index].items.push(result.list[i]);
-        }
-      }
-      newList.shift();
-      this.weatherForecast = newList;
-    },
-    dateBuilder() {
-      let d = new Date();
-      let months = [
-        "January",
-        "February",
-        "March",
-        "April",
-        "May",
-        "June",
-        "July",
-        "August",
-        "September",
-        "October",
-        "November",
-        "December",
-      ];
-      let days = [
-        "Sunday",
-        "Monday",
-        "Tuesday",
-        "Wednesday",
-        "Thursday",
-        "Friday",
-        "Saturday",
-      ];
+      let finalResult = result;
+      finalResult["name"] = this.name;
+      finalResult["country"] = this.country;
+      console.log(finalResult);
 
-      let day = days[d.getDay()];
-      let date = d.getDate();
-      let month = months[d.getMonth()];
-      let year = d.getFullYear();
-
-      return `${day} ${date} ${month} ${year}`;
+      this.weather = finalResult;
+      const pubDate = new Date(1634721146 * 1000);
+      const pubDate2 = new Date(1634756400 * 1000);
+      console.log("pubDate");
+      console.log(pubDate);
+      console.log("pubDate2");
+      console.log(pubDate2);
+      this.query = "";
+      this.error = false;
     },
   },
 };
 </script>
 
 <style lang="scss">
+@import url("https://fonts.googleapis.com/css2?family=Open+Sans:wght@400;600;700&display=swap");
 * {
   margin: 0;
   padding: 0;
@@ -170,9 +92,15 @@ export default {
 }
 #app {
   background: $bg;
+  font-family: "Open Sans", sans-serif;
   min-height: 100vh;
   display: flex;
   justify-content: space-between;
   flex-direction: column;
+  word-wrap: break-word;
+  color: $default;
+  .main {
+    flex: 1;
+  }
 }
 </style>

@@ -1,8 +1,8 @@
 <template>
   <nav>
-    <a href="#">
+    <router-link :to="{ name: 'Home' }">
       <img class="navLogo" src="@/assets/logo.png" alt="BuyerBridge" />
-    </a>
+    </router-link>
   </nav>
 </template>
 
