@@ -29,7 +29,7 @@ export default {
       name: "",
       country: "",
 
-      error: "search a city",
+      error: "empty",
 
       query: "Seattle",
       weather: {},
@@ -70,12 +70,6 @@ export default {
       console.log(finalResult);
 
       this.weather = finalResult;
-      const pubDate = new Date(1634721146 * 1000);
-      const pubDate2 = new Date(1634756400 * 1000);
-      console.log("pubDate");
-      console.log(pubDate);
-      console.log("pubDate2");
-      console.log(pubDate2);
       this.query = "";
       this.error = false;
     },
@@ -101,6 +95,7 @@ export default {
   color: $default;
   .main {
     flex: 1;
+    z-index: 2;
   }
 }
 </style>

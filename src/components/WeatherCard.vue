@@ -78,10 +78,11 @@
           name: 'Location',
           params: {
             id: `${weatherList.name}_01`,
+            buttonTitle: `${buttonTitle}`,
           },
         }"
       >
-        <button>View 4-day Forecast</button>
+        <button>View {{ buttonTitle }}</button>
       </router-link>
     </div>
   </div>
@@ -92,6 +93,11 @@
 export default {
   name: "WeatherCard",
   props: ["weatherList"],
+  data() {
+    return {
+      buttonTitle: "4-day Forecast",
+    };
+  },
 };
 </script>
 
@@ -103,6 +109,7 @@ export default {
   -webkit-box-shadow: 0px 0px 20px 0px rgba(0, 0, 0, 0.2);
   box-shadow: 0px 0px 20px 0px rgba(0, 0, 0, 0.2);
   background: #ffffff;
+  margin: 0 20px;
   &_header {
     display: flex;
     align-items: center;

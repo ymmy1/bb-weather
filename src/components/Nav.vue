@@ -15,7 +15,7 @@ export default {
 <style lang="scss" scoped>
 nav {
   background: rgb(111, 117, 178);
-  background: linear-gradient(160deg, $l-start 38%, $l-end 100%);
+  background: linear-gradient(160deg, $l-start 25%, $l-end 100%);
   padding: 30px 60px;
   .navLogo {
     width: 270px;

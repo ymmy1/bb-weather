@@ -1,5 +1,10 @@
 <template >
   <footer class="footer">
+    <img
+      class="littleManLogo"
+      src="@/assets/little-man.png"
+      alt="BuyerBridge"
+    />
     <img class="navLogoFooter" src="@/assets/logo.png" alt="BuyerBridge" />
   </footer>
 </template>
@@ -13,11 +18,16 @@ export default {
 <style lang="scss" scoped>
 .footer {
   width: 100%;
-  padding: 30px 60px;
   display: flex;
+  position: relative;
   flex-direction: row-reverse;
-
-  //always bottom
+  padding: 80px 60px;
+  .littleManLogo {
+    z-index: 1;
+    position: absolute;
+    bottom: 0;
+    left: 0;
+  }
   .navLogoFooter {
     width: 270px;
   }

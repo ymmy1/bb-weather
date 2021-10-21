@@ -10,19 +10,19 @@
           placeholder="Enter city & state..."
           v-bind:value="modelValue"
           @input="$emit('update:modelValue', $event.target.value)"
-          @keyup.enter="clicked"
+          @keyup.enter="searchClick"
           autocomplete="off"
         />
-        <button @click="clicked">Add&nbsp;Location</button>
+        <button @click="searchClick">Add&nbsp;Location</button>
       </div>
     </div>
     <div class="data-box">
       <h1>Your Locations</h1>
-      <div class="cards">
-        <div v-if="error">{{ error }}</div>
-        <div v-else>
-          <WeatherCard :weatherList="weatherData" />
-        </div>
+      <div class="cards" v-if="error">{{ error }}</div>
+      <div class="cards" v-else>
+        <WeatherCard :weatherList="weatherData" />
+        <WeatherCard :weatherList="weatherData" />
+        <WeatherCard :weatherList="weatherData" />
       </div>
     </div>
   </div>
@@ -36,7 +36,7 @@ export default {
   name: "Home",
   props: ["weatherData", "modelValue", "error"],
   methods: {
-    clicked() {
+    searchClick() {
       console.log("clicking on child");
       if (this.modelValue.length > 0) {
         this.$emit("fetchWeather");
@@ -52,10 +52,11 @@ export default {
 .home {
   padding: 120px 20px 60px;
   .input-box {
-    width: 1000px;
+    width: 700px;
     display: flex;
     margin: auto;
     flex-direction: column;
+    margin-bottom: 80px;
     label {
       font-size: 14px;
       margin-bottom: 10px;
@@ -94,8 +95,13 @@ export default {
       color: $main;
       font-weight: 600;
       font-size: 35px;
-      margin-left: 35px;
-      margin-bottom: 40px;
+      margin-left: 18%;
+    }
+    .cards {
+      justify-content: center;
+      margin-top: 40px;
+      display: flex;
+      width: 100%;
     }
   }
 }
