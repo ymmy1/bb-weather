@@ -2,7 +2,7 @@
   <Nav />
   <div class="main">
     <router-view
-      :weatherData="weather"
+      :weatherData="joke"
       v-model="query"
       :error="error"
       @fetchWeather="fetchWeather()"
@@ -14,6 +14,7 @@
 <script>
 import Nav from "./components/Nav";
 import Footer from "./components/Footer";
+import { mapActions, mapGetters } from "vuex";
 export default {
   name: "App",
   components: {
@@ -28,14 +29,13 @@ export default {
       lon: 0,
       name: "",
       country: "",
-
       error: "empty",
-
       query: "Seattle",
       weather: {},
     };
   },
   methods: {
+    ...mapActions({ addWeather: "setCurrentWeather" }),
     fetchWeather() {
       fetch(
         `${this.url_base}weather?q=${this.query}&units=metric&APPID=${this.api_key}`
@@ -70,9 +70,13 @@ export default {
       console.log(finalResult);
 
       this.weather = finalResult;
+      this.addWeather(finalResult);
       this.query = "";
       this.error = false;
     },
+  },
+  computed: {
+    ...mapGetters({ joke: "getAllWeather" }),
   },
 };
 </script>

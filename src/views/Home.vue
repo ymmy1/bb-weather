@@ -20,9 +20,11 @@
       <h1>Your Locations</h1>
       <div class="cards" v-if="error">{{ error }}</div>
       <div class="cards" v-else>
-        <WeatherCard :weatherList="weatherData" />
-        <WeatherCard :weatherList="weatherData" />
-        <WeatherCard :weatherList="weatherData" />
+        <WeatherCard
+          v-for="(card, idx) in weatherData"
+          :key="idx"
+          :weatherList="card"
+        />
       </div>
     </div>
   </div>
@@ -34,7 +36,7 @@ import WeatherCard from "../components/WeatherCard.vue";
 export default {
   components: { WeatherCard },
   name: "Home",
-  props: ["weatherData", "modelValue", "error"],
+  props: ["weatherData", "modelValue", "error", "joke"],
   methods: {
     searchClick() {
       console.log("clicking on child");
@@ -50,13 +52,13 @@ export default {
 </style>
 <style lang="scss" scoped>
 .home {
-  padding: 120px 20px 60px;
+  padding: 50px 20px;
   .input-box {
-    width: 700px;
+    max-width: 700px;
     display: flex;
     margin: auto;
     flex-direction: column;
-    margin-bottom: 80px;
+    margin-bottom: 30px;
     label {
       font-size: 14px;
       margin-bottom: 10px;
@@ -99,9 +101,27 @@ export default {
     }
     .cards {
       justify-content: center;
-      margin-top: 40px;
       display: flex;
       width: 100%;
+      flex-wrap: wrap;
+    }
+  }
+}
+@media only screen and (max-width: 585px) {
+  .home {
+    .input-box {
+      .row {
+        flex-direction: column;
+        button {
+          margin-top: 20px;
+        }
+      }
+    }
+    .data-box {
+      h1 {
+        margin-left: 0px;
+        text-align: center;
+      }
     }
   }
 }

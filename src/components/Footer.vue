@@ -30,6 +30,22 @@ export default {
   }
   .navLogoFooter {
     width: 270px;
+    z-index: 2;
+  }
+}
+@media only screen and (max-width: 585px) {
+  .footer {
+    .littleManLogo {
+      display: none;
+    }
+  }
+}
+@media only screen and (max-width: 400px) {
+  .footer {
+    padding: 5%;
+    .navLogoFooter {
+      width: 100%;
+    }
   }
 }
 </style>

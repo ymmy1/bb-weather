@@ -86,13 +86,13 @@
       </router-link>
     </div>
   </div>
-  <div></div>
+  <div>{{ joke }}</div>
 </template>
 
 <script>
 export default {
   name: "WeatherCard",
-  props: ["weatherList"],
+  props: ["weatherList", "joke"],
   data() {
     return {
       buttonTitle: "4-day Forecast",
@@ -109,7 +109,7 @@ export default {
   -webkit-box-shadow: 0px 0px 20px 0px rgba(0, 0, 0, 0.2);
   box-shadow: 0px 0px 20px 0px rgba(0, 0, 0, 0.2);
   background: #ffffff;
-  margin: 0 20px;
+  margin: 40px 20px;
   &_header {
     display: flex;
     align-items: center;

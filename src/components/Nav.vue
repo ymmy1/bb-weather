@@ -22,4 +22,12 @@ nav {
     filter: brightness(0) invert(1);
   }
 }
+@media only screen and (max-width: 400px) {
+  nav {
+    padding: 5%;
+    .navLogo {
+      width: 100%;
+    }
+  }
+}
 </style>

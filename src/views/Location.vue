@@ -17,7 +17,7 @@
         <h2 class="titleArea">
           <span>{{ buttonTitle }}</span>
           <span>/</span>
-          <span>{{ weatherData.name }}, {{ weatherData.country }}</span>
+          <span>{{ weatherData[0].name }}, {{ weatherData[0].country }}</span>
         </h2>
       </div>
       <div class="weather-area_box">
@@ -29,25 +29,27 @@
                 <img
                   v-bind:src="
                     'http://openweathermap.org/img/wn/' +
-                    weatherData.current.weather[0].icon +
+                    weatherData[0].current.weather[0].icon +
                     '@2x.png'
                   "
-                  v-bind:alt="weatherData.current.weather[0].main"
+                  v-bind:alt="weatherData[0].current.weather[0].main"
                 />
                 <p class="image-title">
-                  {{ weatherData.current.weather[0].description }}
+                  {{ weatherData[0].current.weather[0].description }}
                 </p>
               </div>
               <div class="temp-area">
-                <p class="main">{{ Math.round(weatherData.current.temp) }}°</p>
+                <p class="main">
+                  {{ Math.round(weatherData[0].current.temp) }}°
+                </p>
                 <div class="minor">
                   <div class="min">
                     <h3>min</h3>
-                    <p>{{ Math.round(weatherData.daily[0].temp.min) }}°</p>
+                    <p>{{ Math.round(weatherData[0].daily[0].temp.min) }}°</p>
                   </div>
                   <div class="max">
                     <h3>max</h3>
-                    <p>{{ Math.round(weatherData.daily[0].temp.max) }}°</p>
+                    <p>{{ Math.round(weatherData[0].daily[0].temp.max) }}°</p>
                   </div>
                 </div>
               </div>
@@ -57,7 +59,7 @@
         <div class="forecast-section">
           <div
             class="forecast-box"
-            v-for="dayWheater in weatherData.daily.slice(1, 4)"
+            v-for="dayWheater in weatherData[0].daily.slice(1, 4)"
             :key="dayWheater.moonrise"
           >
             <h4>
@@ -105,10 +107,12 @@
 export default {
   props: ["id", "weatherData", "buttonTitle"],
   name: "Location",
+  mounted() {
+    window.scrollTo(0, 0);
+  },
   methods: {
     newDate(date) {
-      console.log(date);
-      const tod = new Date(this.weatherData.current.dt * 1000);
+      const tod = new Date(this.weatherData[0].current.dt * 1000);
       const d = new Date(date * 1000);
       let days = [
         "Sunday",
@@ -151,8 +155,9 @@ export default {
     }
   }
   .weather-area {
-    width: 1200px;
+    max-width: 1200px;
     margin: auto;
+    z-index: 3;
     &_navigation {
       display: flex;
       align-items: center;
@@ -200,6 +205,7 @@ export default {
           .weather-display {
             margin-bottom: 50px;
             display: flex;
+            flex-wrap: wrap;
             .image-area {
               text-align: center;
               margin-right: 50px;
@@ -249,6 +255,9 @@ export default {
           &:nth-child(even) {
             background: #ffffff;
           }
+          &:nth-child(odd) {
+            background: #fbfbfb;
+          }
           h4 {
             color: $main;
             font-weight: 400;
@@ -258,6 +267,7 @@ export default {
             display: flex;
             align-items: center;
             justify-content: space-between;
+            flex-wrap: wrap;
             img {
               width: 80px;
             }
@@ -284,6 +294,44 @@ export default {
                     text-transform: lowercase;
                   }
                 }
+              }
+            }
+          }
+        }
+      }
+    }
+  }
+}
+@media only screen and (max-width: 943px) {
+  .location {
+    .weather-area {
+      &_box {
+        flex-direction: column;
+        .forecast-section {
+          width: 100%;
+        }
+      }
+    }
+  }
+}
+@media only screen and (max-width: 666px) {
+  .location {
+    .weather-area {
+      &_navigation {
+        h2 {
+          span:nth-child(1),
+          span:nth-child(2) {
+            display: none;
+          }
+        }
+      }
+      &_box {
+        .weather-section {
+          &_body {
+            .weather-display {
+              justify-content: center;
+              .image-area {
+                margin-right: 0px;
               }
             }
           }
