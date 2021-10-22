@@ -77,8 +77,9 @@
         :to="{
           name: 'Location',
           params: {
-            id: `${weatherList.name}_01`,
+            id: `${weatherList.name}_${index}`,
             buttonTitle: `${buttonTitle}`,
+            index: `${index}`,
           },
         }"
       >
@@ -86,13 +87,12 @@
       </router-link>
     </div>
   </div>
-  <div>{{ joke }}</div>
 </template>
 
 <script>
 export default {
   name: "WeatherCard",
-  props: ["weatherList", "joke"],
+  props: ["weatherList", "index"],
   data() {
     return {
       buttonTitle: "4-day Forecast",

@@ -10,6 +10,9 @@ export default createStore({
     setCurrentWeather(state, payload) {
       console.log('mutation started');
       state.allWeather.push(payload);
+      if (state.allWeather.length > 3) {
+        state.allWeather.shift();
+      }
     },
   },
   actions: {

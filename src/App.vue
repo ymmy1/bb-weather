@@ -5,6 +5,7 @@
       :weatherData="joke"
       v-model="query"
       :error="error"
+      :empty="empty"
       @fetchWeather="fetchWeather()"
     />
   </div>
@@ -29,8 +30,9 @@ export default {
       lon: 0,
       name: "",
       country: "",
-      error: "empty",
-      query: "Seattle",
+      error: "",
+      empty: "↑ Add your first Location ↑",
+      query: "",
       weather: {},
     };
   },
@@ -72,6 +74,7 @@ export default {
       this.weather = finalResult;
       this.addWeather(finalResult);
       this.query = "";
+      this.empty = "";
       this.error = false;
     },
   },

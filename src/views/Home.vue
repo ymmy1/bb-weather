@@ -15,15 +15,17 @@
         />
         <button @click="searchClick">Add&nbsp;Location</button>
       </div>
+      <p v-if="error">{{ error }}</p>
     </div>
     <div class="data-box">
       <h1>Your Locations</h1>
-      <div class="cards" v-if="error">{{ error }}</div>
+      <div class="cards" v-if="empty">{{ empty }}</div>
       <div class="cards" v-else>
         <WeatherCard
-          v-for="(card, idx) in weatherData"
-          :key="idx"
+          v-for="(card, index) in weatherData"
+          :key="index"
           :weatherList="card"
+          :index="index"
         />
       </div>
     </div>
@@ -36,7 +38,7 @@ import WeatherCard from "../components/WeatherCard.vue";
 export default {
   components: { WeatherCard },
   name: "Home",
-  props: ["weatherData", "modelValue", "error", "joke"],
+  props: ["weatherData", "modelValue", "error", "joke", "empty"],
   methods: {
     searchClick() {
       console.log("clicking on child");
@@ -101,6 +103,7 @@ export default {
     }
     .cards {
       justify-content: center;
+      flex-direction: row-reverse;
       display: flex;
       width: 100%;
       flex-wrap: wrap;

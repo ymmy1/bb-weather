@@ -1,5 +1,5 @@
 <template>
-  <div class="location">
+  <div v-if="weatherData[index]" class="location">
     <div class="link">
       <router-link
         :to="{
@@ -17,7 +17,10 @@
         <h2 class="titleArea">
           <span>{{ buttonTitle }}</span>
           <span>/</span>
-          <span>{{ weatherData[0].name }}, {{ weatherData[0].country }}</span>
+          <span
+            >{{ weatherData[index].name }},
+            {{ weatherData[index].country }}</span
+          >
         </h2>
       </div>
       <div class="weather-area_box">
@@ -29,27 +32,31 @@
                 <img
                   v-bind:src="
                     'http://openweathermap.org/img/wn/' +
-                    weatherData[0].current.weather[0].icon +
+                    weatherData[index].current.weather[0].icon +
                     '@2x.png'
                   "
-                  v-bind:alt="weatherData[0].current.weather[0].main"
+                  v-bind:alt="weatherData[index].current.weather[0].main"
                 />
                 <p class="image-title">
-                  {{ weatherData[0].current.weather[0].description }}
+                  {{ weatherData[index].current.weather[0].description }}
                 </p>
               </div>
               <div class="temp-area">
                 <p class="main">
-                  {{ Math.round(weatherData[0].current.temp) }}°
+                  {{ Math.round(weatherData[index].current.temp) }}°
                 </p>
                 <div class="minor">
                   <div class="min">
                     <h3>min</h3>
-                    <p>{{ Math.round(weatherData[0].daily[0].temp.min) }}°</p>
+                    <p>
+                      {{ Math.round(weatherData[index].daily[0].temp.min) }}°
+                    </p>
                   </div>
                   <div class="max">
                     <h3>max</h3>
-                    <p>{{ Math.round(weatherData[0].daily[0].temp.max) }}°</p>
+                    <p>
+                      {{ Math.round(weatherData[index].daily[0].temp.max) }}°
+                    </p>
                   </div>
                 </div>
               </div>
@@ -59,7 +66,7 @@
         <div class="forecast-section">
           <div
             class="forecast-box"
-            v-for="dayWheater in weatherData[0].daily.slice(1, 4)"
+            v-for="dayWheater in weatherData[index].daily.slice(1, 4)"
             :key="dayWheater.moonrise"
           >
             <h4>
@@ -101,18 +108,19 @@
       </div>
     </div>
   </div>
+  <div class="else" v-else>This location is not added to your list</div>
 </template>
 
 <script>
 export default {
-  props: ["id", "weatherData", "buttonTitle"],
+  props: ["id", "weatherData", "buttonTitle", "index"],
   name: "Location",
   mounted() {
     window.scrollTo(0, 0);
   },
   methods: {
     newDate(date) {
-      const tod = new Date(this.weatherData[0].current.dt * 1000);
+      const tod = new Date(this.weatherData[this.index].current.dt * 1000);
       const d = new Date(date * 1000);
       let days = [
         "Sunday",
@@ -139,6 +147,12 @@ export default {
 </script>
 
 <style lang="scss" scoped>
+.else {
+  padding: 20px;
+  width: 100%;
+  text-align: center;
+  font-size: 20px;
+}
 .location {
   padding: 40px;
   .link {
